@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/MIA-vlc-read-sound/descriptor": {
+    "/mia-vlc-read-sound/descriptor": {
         parameters: {
             query?: never;
             header?: never;
@@ -21,7 +21,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/MIA-vlc-read-sound/status": {
+    "/mia-vlc-read-sound/status": {
         parameters: {
             query?: never;
             header?: never;
@@ -38,7 +38,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/MIA-vlc-read-sound/read-sound": {
+    "/mia-vlc-read-sound/read-sound": {
         parameters: {
             query?: never;
             header?: never;

@@ -12,6 +12,10 @@
     import type { ChildProcess } from "node:child_process";
     import type { Readable } from "node:stream";
 
+    // externals
+    import type ContainerPattern from "node-containerpattern";
+    import type { iDescriptorUserOptions } from "node-pluginsmanager-plugin";
+
     // locals
     import type { operations } from "./Descriptor";
 
@@ -19,7 +23,19 @@
 
 export default class MediatorVLCReadSound extends Mediator {
 
-    protected _initWorkSpace (): Promise<void> {
+    private _container: ContainerPattern | null;
+
+    public constructor (data: iDescriptorUserOptions) {
+
+        super(data);
+
+        this._container = null;
+
+    }
+
+    protected _initWorkSpace (container: ContainerPattern): Promise<void> {
+
+        this._container = container;
 
         return this._execute("vlc", [ "--help" ]).then((): Promise<void> => {
             return Promise.resolve();
@@ -34,6 +50,8 @@ export default class MediatorVLCReadSound extends Mediator {
     protected _execute (cmd: string, args: string[] = []) : Promise<string> {
 
         return new Promise((resolve, reject): void => {
+
+            (this._container as ContainerPattern).get("log").debug(cmd + " " + args.join(" "));
 
             const child: ChildProcess = spawn(cmd, args);
 
@@ -57,7 +75,8 @@ export default class MediatorVLCReadSound extends Mediator {
 
     }
 
-    public readSound (urlParameters: operations["readSound"]["parameters"], bodyParameters: operations["readSound"]["requestBody"]["content"]["application/json"]): Promise<operations["readSound"]["responses"]["204"]["content"]["application/json"]> {
+    // public readSound (urlParameters: operations["readSound"]["parameters"], bodyParameters: operations["readSound"]["requestBody"]["content"]["application/json"]): Promise<operations["readSound"]["responses"]["204"]["content"]["application/json"]> {
+    public readSound (urlParameters: operations["readSound"]["parameters"], bodyParameters: operations["readSound"]["requestBody"]["content"]["application/json"]): Promise<void> {
 
         return this._execute("vlc", [
             "--intf",

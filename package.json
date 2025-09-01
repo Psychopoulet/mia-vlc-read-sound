@@ -1,5 +1,5 @@
 {
-  "name": "MIA-vlc-read-sound",
+  "name": "mia-vlc-read-sound",
   "version": "1.0.0",
   "description": "Read sound with VLC - plugin for MIA",
   "typings": "./lib/cjs/main.d.cts",
