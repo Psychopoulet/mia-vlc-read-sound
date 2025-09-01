@@ -53,22 +53,43 @@ export default class MediatorVLCReadSound extends Mediator {
 
             (this._container as ContainerPattern).get("log").debug(cmd + " " + args.join(" "));
 
+            let exited: boolean = false;
+
             const child: ChildProcess = spawn(cmd, args);
 
             child.once("error", (err: Error): void => {
-                return reject(err);
+
+                if (!exited) {
+
+                    exited = true;
+
+                    return reject(err);
+
+                }
+
             });
 
+            let stdout: string = "";
+            let stderr: string = "";
+
             (child.stdout as Readable).on("data", (chunk: Buffer): void => {
-                console.log("stdout", chunk);
+                stdout += chunk.toString("utf-8");
             });
 
             (child.stderr as Readable).on("data", (chunk: Buffer): void => {
-                console.log("stderr", chunk);
+                stderr += chunk.toString("utf-8");
             });
 
             child.on("close", (code: number): void => {
-                return code ? resolve("@WIP") : reject(new Error("@WIP"));
+
+                if (!exited) {
+
+                    exited = true;
+
+                    return code ? reject(new Error(stderr)) : resolve(stdout);
+
+                }
+
             });
 
         });
