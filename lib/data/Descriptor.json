@@ -64,6 +64,48 @@
 					}
 				}
 			}
+		},
+
+		"/MIA-vlc-read-sound/read-sound": {
+			"put": {
+				"description": "",
+				"summary": "Read sound with VLC",
+				"operationId": "readSound",
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"sound": {
+										"type": "string"
+									}
+								},
+								"required": [ "sound" ]
+							}
+						}
+					}
+				},
+				"responses": {
+					"204": {
+						"description": "Everything is fine",
+						"content": {
+							"application/json": {}
+						}
+					},
+					"default": {
+						"description": "An error occured",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 
 	},

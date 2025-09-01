@@ -9,7 +9,11 @@
 // types & interfaces
 
     // externals
-    import { iOrchestratorOptions } from "node-pluginsmanager-plugin";
+    import type { iOrchestratorOptions } from "node-pluginsmanager-plugin";
+    import type ContainerPattern from "node-containerpattern";
+
+    // locals
+    import type MediatorVLCReadSound from "./Mediator";
 
 // module
 
@@ -23,6 +27,30 @@ export default class OrchestratorVLCReadSound extends Orchestrator {
             "descriptorFile": join(__dirname, "..", "data", "Descriptor.json"),
             "mediatorFile": join(__dirname, "Mediator.js"),
             "serverFile": join(__dirname, "Server.js")
+        });
+
+    }
+
+    protected _initWorkSpace (container: ContainerPattern): Promise<void> {
+
+        container.set("sound-reader", (path: string): Promise<void> => {
+            return this.readSound(path);
+        });
+
+        return Promise.resolve();
+
+    }
+
+    public readSound (path: string): Promise<void> {
+
+        return (this._Mediator as MediatorVLCReadSound).checkParameters("readSound", {}, {
+            "sound": path
+        }).then((): Promise<void> => {
+
+            return (this._Mediator as MediatorVLCReadSound).readSound({}, {
+                "sound": path
+            });
+
         });
 
     }
