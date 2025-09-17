@@ -19,10 +19,10 @@
     "/bin",
     "/lib/cjs",
     "/lib/data",
-    "/public"
+    "/public/dist"
   ],
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "node-pluginsmanager-plugin": "6.4.5"

@@ -113,6 +113,7 @@
 		"schemas": {
 			"Error": {
 				"type": "object",
+				"description": "JSON Error description",
 				"properties": {
 					"code": {
 						"type": "string"
