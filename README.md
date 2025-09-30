@@ -1,1 +1,3 @@
-# MIA-vlc-read-sound
+# mia-stream-deck
+
+[API Descriptor](./lib/data/Descriptor.json)
