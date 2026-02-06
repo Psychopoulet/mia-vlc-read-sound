@@ -55,12 +55,12 @@
   "author": "Sébastien VIDAL",
   "contributors": [],
   "license": "ISC",
-  "homepage": "https://github.com/Psychopoulet/MIA-vlc-read-sound#readme",
+  "homepage": "https://github.com/Psychopoulet/mia-vlc-read-sound#readme",
   "repository": {
     "type": "git",
-    "url": "git://github.com/Psychopoulet/MIA-vlc-read-sound"
+    "url": "git://github.com/Psychopoulet/mia-vlc-read-sound"
   },
   "bugs": {
-    "url": "https://github.com/Psychopoulet/MIA-vlc-read-sound/issues"
+    "url": "https://github.com/Psychopoulet/mia-vlc-read-sound/issues"
   }
 }
