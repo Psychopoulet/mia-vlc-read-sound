@@ -1,9 +1,22 @@
 {
+
   "name": "mia-vlc-read-sound",
   "version": "1.0.0",
   "description": "Read sound with VLC - plugin for MIA",
+
+  "type": "commonjs",
   "typings": "./lib/cjs/main.d.cts",
   "main": "./lib/cjs/main.cjs",
+
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./lib/cjs/main.d.cts",
+        "default": "./lib/cjs/main.cjs"
+      }
+    }
+  },
+
   "scripts": {
     "prepare": "npx husky",
     "lint": "npx eslint --config \".eslintrc-src.js\" --ext .cts,.ts \"./lib/src/**/*\" && npx eslint --config \".eslintrc-tests.js\" \"./bin/*.js\" \"./test/**/*.js\"",
@@ -15,15 +28,15 @@
     "build": "npm run-script clean && npx openapi-typescript ./lib/data/Descriptor.json -o ./lib/src/Descriptor.ts && npx tsc --project \"./tsconfig.json\"",
     "ci": "npm run-script tests && npx nyc report --reporter=text-lcov | coveralls"
   },
+
   "files": [
-    "/bin",
     "/lib/cjs",
-    "/lib/data",
-    "/public/dist"
+    "/lib/data"
   ],
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.22.0"
   },
+
   "dependencies": {
     "node-pluginsmanager-plugin": "6.4.5"
   },
@@ -45,16 +58,17 @@
     "used-deps-analyzer": "0.1.8",
     "winston": "3.17.0"
   },
+
   "husky": {
     "hooks": {
-      "pre-commit": "npm run-script lint",
-      "pre-push": "npm run-script unit-tests",
-      "pre-receive": "npm run-script tests"
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run unit-tests"
     }
   },
   "author": "Sébastien VIDAL",
   "contributors": [],
   "license": "ISC",
+
   "homepage": "https://github.com/Psychopoulet/mia-vlc-read-sound#readme",
   "repository": {
     "type": "git",
@@ -63,4 +77,5 @@
   "bugs": {
     "url": "https://github.com/Psychopoulet/mia-vlc-read-sound/issues"
   }
+
 }
