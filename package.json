@@ -2,7 +2,7 @@
 
   "name": "mia-vlc-read-sound",
   "version": "1.0.0",
-  "description": "Read sound with VLC - plugin for MIA",
+  "description": "Read sound with VLC - plugin for MIA.",
 
   "type": "commonjs",
   "typings": "./lib/cjs/main.d.cts",
@@ -18,20 +18,36 @@
   },
 
   "scripts": {
-    "prepare": "npx husky",
-    "lint": "npx eslint --config \".eslintrc-src.js\" --ext .cts,.ts \"./lib/src/**/*\" && npx eslint --config \".eslintrc-tests.js\" \"./bin/*.js\" \"./test/**/*.js\"",
+
+    "prepare": "npx husky || true",
+
+    "lint-back": "npx eslint --config .eslintrc-back.js --ext .ts,.cts,.mts ./lib/src/**/*",
+    "lint-front": "npx eslint --config .eslintrc-front.js --ext .tsx,.ts ./public/src/**/*",
+    "lint-tests": "npx eslint --config .eslintrc-tests.js --ext .js,.cjs,.mjs ./test/**/*",
+    "lint": "npm run lint-back && npm run lint-front && npm run lint-tests",
+
+    "clean-back": "npx rimraf ./lib/cjs",
+    "clean-front": "npx rimraf ./public/cjs",
+    "clean": "npm run clean-back && npm run clean-front",
+
+    "transpile-openapi": "npx openapi-typescript ./lib/data/Descriptor.json -o ./lib/src/Descriptor.ts ",
+
+    "build-back": "npm run-script clean-back && npm run-script transpile-openapi && npx tsc --project ./tsconfig.json",
+    "build-front": "npm run-script clean-front && npm run-script transpile-openapi && npx webpack --config \"./webpack.config.js\"",
+    "build": "npm run build-back && npm run build-front",
+
     "check-requires": "npx used-deps-analyzer \"./package.json\" \"./lib/src\" --no-dev --overkill \"fs-extra\" \"node-promfs\"",
-    "check-updates": "npx check-version-modules",
+    "check-updates": "npx check-version-modules --no-fail-at-major --fail-at-minor --fail-at-patch",
     "unit-tests": "npm run-script build && npx nyc --reporter=html --reporter=text mocha",
-    "tests": "npm run-script lint && npm run-script check-requires && npm run-script check-updates && npm run-script unit-tests",
-    "clean": "npx rimraf \"./lib/cjs\"",
-    "build": "npm run-script clean && npx openapi-typescript ./lib/data/Descriptor.json -o ./lib/src/Descriptor.ts && npx tsc --project \"./tsconfig.json\"",
-    "ci": "npm run-script tests && npx nyc report --reporter=text-lcov | coveralls"
+
+    "tests": "npm run-script lint && npm run-script check-requires && npm run-script check-updates && npm run-script unit-tests"
+
   },
 
   "files": [
-    "/lib/cjs",
-    "/lib/data"
+    "lib/cjs",
+    "lib/data",
+    "public/dist"
   ],
   "engines": {
     "node": ">=22.22.0"
@@ -72,7 +88,7 @@
   "homepage": "https://github.com/Psychopoulet/mia-vlc-read-sound#readme",
   "repository": {
     "type": "git",
-    "url": "git://github.com/Psychopoulet/mia-vlc-read-sound"
+    "url": "git://github.com/Psychopoulet/mia-vlc-read-sound.git"
   },
   "bugs": {
     "url": "https://github.com/Psychopoulet/mia-vlc-read-sound/issues"
