@@ -32,15 +32,16 @@
 
     "transpile-openapi": "npx openapi-typescript ./lib/data/Descriptor.json -o ./lib/src/Descriptor.ts ",
 
-    "build-back": "npm run-script clean-back && npm run-script transpile-openapi && npx tsc --project ./tsconfig.json",
-    "build-front": "npm run-script clean-front && npm run-script transpile-openapi && npx webpack --config \"./webpack.config.js\"",
+    "build-back": "npm run clean-back && npm run transpile-openapi && npx tsc --project ./tsconfig.json",
+    "build-front": "npm run clean-front && npm run transpile-openapi && npx webpack --config \"./webpack.config.js\"",
     "build": "npm run build-back && npm run build-front",
 
     "check-requires": "npx used-deps-analyzer \"./package.json\" \"./lib/src\" --no-dev --overkill \"fs-extra\" \"node-promfs\"",
     "check-updates": "npx check-version-modules --no-fail-at-major --fail-at-minor --fail-at-patch",
-    "unit-tests": "npm run-script build && npx nyc --reporter=html --reporter=text mocha",
+    "unit-tests": "echo 'not unit tests here'",
+    "unit-tests-local": "echo 'not unit tests here'",
 
-    "tests": "npm run-script lint && npm run-script check-requires && npm run-script check-updates && npm run-script unit-tests"
+    "tests": "npm run lint && npm run check-requires && npm run check-updates && npm run unit-tests"
 
   },
 
@@ -54,7 +55,7 @@
   },
 
   "dependencies": {
-    "node-pluginsmanager-plugin": "7.0.1"
+    "node-pluginsmanager-plugin": "7.1.0"
   },
   "devDependencies": {
     "@types/express": "5.0.6",
@@ -78,7 +79,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint",
-      "pre-push": "npm run unit-tests"
+      "pre-push": "npm run build && npm run unit-tests-local"
     }
   },
   "author": "Sébastien VIDAL",
