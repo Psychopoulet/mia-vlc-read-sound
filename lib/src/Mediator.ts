@@ -43,7 +43,7 @@ export default class MediatorVLCReadSound extends Mediator {
 
     }
 
-    protected _releaseWorkSpace  (): Promise<void> {
+    protected _releaseWorkSpace (): Promise<void> {
         return Promise.resolve();
     }
 
@@ -51,7 +51,7 @@ export default class MediatorVLCReadSound extends Mediator {
 
         return new Promise((resolve, reject): void => {
 
-            (this._container as ContainerPattern).get("log").debug(cmd + " " + args.join(" "));
+            ((this._container as ContainerPattern).get("log") as { "debug": (log: string) => void }).debug(cmd + " " + args.join(" "));
 
             let exited: boolean = false;
 
@@ -63,7 +63,7 @@ export default class MediatorVLCReadSound extends Mediator {
 
                     exited = true;
 
-                    return reject(err);
+                    reject(err);
 
                 }
 
@@ -86,7 +86,12 @@ export default class MediatorVLCReadSound extends Mediator {
 
                     exited = true;
 
-                    return code ? reject(new Error(stderr)) : resolve(stdout);
+                    if (code) {
+                        reject(new Error(stderr));
+                    }
+                    else {
+                        resolve(stdout);
+                    }
 
                 }
 
