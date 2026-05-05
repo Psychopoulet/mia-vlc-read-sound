@@ -11,7 +11,14 @@ module.exports = defineConfig([
         "plugins": {
             personnallinter
         },
-        "extends": [ personnallinter.configs["react"] ]
+        "extends": [ personnallinter.configs["react"] ],
+        "languageOptions": {
+            "parserOptions": {
+                "project": "./tsconfig-front.json",
+                "projectService": false,
+                "tsconfigRootDir": __dirname
+            }
+        }
     },
     globalIgnores([ "public/src/Descriptor.ts" ])
 ]);
