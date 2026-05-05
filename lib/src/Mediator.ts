@@ -51,7 +51,7 @@ export default class MediatorVLCReadSound extends Mediator {
 
         return new Promise((resolve, reject): void => {
 
-            ((this._container as ContainerPattern).get("log") as { "debug": (log: string) => void }).debug(cmd + " " + args.join(" "));
+            (this._container as ContainerPattern).get<{ "debug": (log: string) => void }>("log").debug(cmd + " " + args.join(" "));
 
             let exited: boolean = false;
 
