@@ -2,6 +2,8 @@
 
     // natives
     import { spawn } from "node:child_process";
+    import { readFile } from "node:fs/promises";
+    import { join } from "node:path";
 
     // externals
     import { Mediator } from "node-pluginsmanager-plugin";
@@ -46,6 +48,42 @@ export default class MediatorVLCReadSound extends Mediator {
     protected _releaseWorkSpace (): Promise<void> {
         return Promise.resolve();
     }
+
+    // front files
+
+    public getFrontIndex (): Promise<operations["getFrontIndex"]["responses"]["200"]["content"]["text/html"]> {
+
+        return readFile(join(__dirname, "..", "..", "public", "index.html"), "utf-8").then((content: string): string => {
+
+            return content
+
+                .replace(/{{plugin.name}}/g, this.getPluginName())
+                .replace(/{{plugin.version}}/g, this.getPluginVersion())
+                .replace(/{{plugin.description}}/g, this.getPluginDescription());
+
+        });
+
+    }
+
+    public getFrontApp (): Promise<operations["getFrontApp"]["responses"]["200"]["content"]["application/javascript"]> {
+
+        return readFile(join(__dirname, "..", "..", "public", "dist", "bundle.min.js"), "utf-8").then((content: string): string => {
+
+            return content
+
+                .replace(/{{plugin.name}}/g, this.getPluginName())
+                .replace(/{{plugin.version}}/g, this.getPluginVersion())
+                .replace(/{{plugin.description}}/g, this.getPluginDescription());
+
+        });
+
+    }
+
+    public getFrontAppMap (): Promise<operations["getFrontApp"]["responses"]["200"]["content"]["application/javascript"]> {
+        return readFile(join(__dirname, "..", "..", "public", "dist", "bundle.min.js.map"), "utf-8");
+    }
+
+    // api
 
     protected _execute (cmd: string, args: string[] = []) : Promise<string> {
 
