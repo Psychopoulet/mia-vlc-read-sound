@@ -52,46 +52,46 @@ export default class App extends React.Component<iPropsNode, iState> {
     public componentDidMount (): void {
 
         this._sdk
-            .on("connected", this._onConnected.bind(this))
-            .on("disconnected", this._onDisconnected.bind(this))
-            .on("error", this._onError.bind(this));
+            .on("connected", this._onConnected)
+            .on("disconnected", this._onDisconnected)
+            .on("error", this._onError);
 
     }
 
     public componentWillUnmount (): void {
 
         this._sdk
-            .off("connected", this._onConnected.bind(this))
-            .off("disconnected", this._onDisconnected.bind(this))
-            .off("error", this._onError.bind(this));
+            .off("connected", this._onConnected)
+            .off("disconnected", this._onDisconnected)
+            .off("error", this._onError);
 
     }
 
     // handlers
 
-    private _onConnected (): void {
+    private readonly _onConnected = (): void => {
 
         this.setState({
             "connected": true
         });
 
-    }
+    };
 
-    private _onDisconnected (): void {
+    private readonly _onDisconnected = (): void => {
 
         this.setState({
             "connected": false
         });
 
-    }
+    };
 
-    private _onError (err: Error | null): void {
+    private readonly _onError = (err: Error | null): void => {
 
         this.setState({
             "error": err
         });
 
-    }
+    };
 
     // interface handlers
 
