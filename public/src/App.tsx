@@ -1,5 +1,3 @@
-
-
 // deps
 
     // externals
@@ -56,6 +54,8 @@ export default class App extends React.Component<iPropsNode, iState> {
             .on("disconnected", this._onDisconnected)
             .on("error", this._onError);
 
+        this._sdk.connect();
+
     }
 
     public componentWillUnmount (): void {
@@ -64,6 +64,8 @@ export default class App extends React.Component<iPropsNode, iState> {
             .off("connected", this._onConnected)
             .off("disconnected", this._onDisconnected)
             .off("error", this._onError);
+
+        this._sdk.disconnect();
 
     }
 
@@ -95,13 +97,13 @@ export default class App extends React.Component<iPropsNode, iState> {
 
     // interface handlers
 
-    private _handleCloseError (): void {
+    private readonly _handleCloseError = (): void => {
 
         this.setState({
             "error": null
         });
 
-    }
+    };
 
     // render
 
@@ -118,7 +120,7 @@ export default class App extends React.Component<iPropsNode, iState> {
 
             return <div className="container-fluid">
 
-                { this.state.error && <Modal appId="{{plugin.name}}-app" title="Error" variant="danger" centered size="sm" onClose={ this._handleCloseError.bind(this) }>
+                { this.state.error && <Modal appId="{{plugin.name}}-app" title="Error" variant="danger" centered size="sm" onClose={ this._handleCloseError }>
                     <ModalBody>
                         { this.state.error.message || "An error occurred" }
                     </ModalBody>

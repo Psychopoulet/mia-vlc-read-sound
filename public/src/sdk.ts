@@ -1,5 +1,3 @@
-
-
 // deps
 
     // natives
@@ -7,8 +5,8 @@
 
 // types & interfaces
 
-    // locals
-    // import type { components, operations, paths } from "./descriptor";
+    // natives
+    type Timeout = ReturnType<typeof setTimeout>;
 
 // component
 
@@ -18,48 +16,87 @@ export class SDK extends EventEmitter<{
     "error": [ Error ];
 }> {
 
+    // protected
+
+        protected _socket: WebSocket | null;
+        protected _reconnectTimeout: Timeout | null;
+
+    // constructor
+
     public constructor () {
 
         super();
 
-        const socket = new WebSocket(
+        this._socket = null;
+        this._reconnectTimeout = null;
+
+    }
+
+    // public methods
+
+    public connect (): void {
+
+        if (WebSocket.OPEN === this._socket?.readyState) {
+            return;
+        }
+
+        if (this._reconnectTimeout) {
+            return;
+        }
+
+        this._socket = new WebSocket(
             ("https:" === window.location.protocol ? "wss:" : "ws:")
             + "//" + window.location.host
         );
 
-        socket.addEventListener("error", (err: Event): void => {
-            // eslint-disable-next-line no-console -- template: surface socket errors during development
-            console.error("socket error", err);
-        });
-
-        socket.addEventListener("open", (): void => {
+        this._socket.onopen = (): void => {
             this.emit("connected");
-        });
+        };
 
-        socket.addEventListener("close", (data: CloseEvent): void => {
-            this.emit("disconnected", data.code, data.reason);
-        });
+        this._socket.onclose = (event: CloseEvent): void => {
 
-        socket.addEventListener("error", (evt: Event): void => {
-            const message = evt instanceof ErrorEvent ? evt.message : "Socket error";
-            this.emit("error", new Error(message));
-        });
+            this.emit("disconnected", event.code, event.reason);
 
-        socket.addEventListener("message", (): void => {
-
-            /*
-            const parsedMessage: <types> = JSON.parse(_event.data);
-
-            if (<plugin name> === parsedMessage.plugin) {
-
-                switch (parsedMessage.command) {
-                    <cases>
-                }
-
+            // normal closure
+            if (1000 === event.code) {
+                return;
             }
-            */
 
-        });
+            this._reconnectTimeout = setTimeout((): void => {
+                this._reconnectTimeout = null;
+                return this.connect();
+            }, 1000);
+
+        };
+
+        this._socket.onerror = (evt: Event): void => {
+
+            // avoid catching error on reconnection
+            if (evt instanceof ErrorEvent) {
+                this.emit("error", new Error(evt.message));
+            }
+
+        };
+
+    }
+
+    public disconnect (): void {
+
+        if (this._reconnectTimeout) {
+            clearTimeout(this._reconnectTimeout);
+            this._reconnectTimeout = null;
+        }
+
+        if (this._socket
+            && (
+                WebSocket.CONNECTING === this._socket.readyState
+                || WebSocket.OPEN === this._socket.readyState
+            )
+        ) {
+            this._socket.close(1000, "Normal closure");
+        }
+
+        this._socket = null;
 
     }
 
