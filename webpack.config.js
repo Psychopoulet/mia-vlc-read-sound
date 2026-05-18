@@ -14,7 +14,7 @@
 
 module.exports = {
 
-    "mode": "development",
+    "mode": "production",
 
     "entry": join(PUBLIC, "src", "index.tsx"),
 

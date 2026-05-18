@@ -23,7 +23,7 @@
 						}
 					},
 					"default": {
-						"description": "An error occured",
+						"description": "An error occurred",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -53,7 +53,7 @@
 						}
 					},
 					"default": {
-						"description": "An error occured",
+						"description": "An error occurred",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -83,7 +83,7 @@
 						}
 					},
 					"default": {
-						"description": "An error occured",
+						"description": "An error occurred",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -112,7 +112,7 @@
 						}
 					},
 					"default": {
-						"description": "An error occured",
+						"description": "An error occurred",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -135,13 +135,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"type": "object"
+									"type": "object",
+									"additionalProperties": true
 								}
 							}
 						}
 					},
 					"default": {
-						"description": "An error occured",
+						"description": "An error occurred",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -183,7 +184,7 @@
 						}
 					},
 					"default": {
-						"description": "An error occured",
+						"description": "An error occurred",
 						"content": {
 							"application/json": {
 								"schema": {

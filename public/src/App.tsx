@@ -4,7 +4,7 @@
 
     // externals
     import React from "react";
-    import { Alert } from "react-bootstrap-fontawesome";
+    import { Alert, Modal, ModalBody } from "react-bootstrap-fontawesome";
 
     // locals
     import getSDK from "./sdk";
@@ -39,6 +39,8 @@ export default class App extends React.Component<iPropsNode, iState> {
     public constructor (props: iPropsNode) {
 
         super(props);
+
+        // state
 
         this.state = {
             "connected": false,
@@ -91,6 +93,16 @@ export default class App extends React.Component<iPropsNode, iState> {
 
     }
 
+    // interface handlers
+
+    private _handleCloseError (): void {
+
+        this.setState({
+            "error": null
+        });
+
+    }
+
     // render
 
     public render (): React.JSX.Element {
@@ -102,16 +114,19 @@ export default class App extends React.Component<iPropsNode, iState> {
             </div>;
 
         }
-        else if (this.state.error) {
-
-            return <div className="container">
-                <Alert variant="danger">{ this.state.error.message || "An error occurred" }</Alert>
-            </div>;
-
-        }
         else {
 
-            return <span>Hello World !</span>;
+            return <div className="container-fluid">
+
+                { this.state.error && <Modal appId="{{plugin.name}}-app" title="Error" variant="danger" centered size="sm" onClose={ this._handleCloseError.bind(this) }>
+                    <ModalBody>
+                        { this.state.error.message || "An error occurred" }
+                    </ModalBody>
+                </Modal> }
+
+                <span>Hello World !</span>
+
+            </div>;
 
         }
 
