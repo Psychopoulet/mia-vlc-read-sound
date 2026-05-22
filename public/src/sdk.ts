@@ -8,12 +8,18 @@
     // natives
     type Timeout = ReturnType<typeof setTimeout>;
 
+    // locals
+    import type { components } from "./Descriptor";
+    type tEvents = components["schemas"]["PushEventPluginInitialized"] | components["schemas"]["PushEventPluginReleased"] | components["schemas"]["PushEventPluginError"];
+
 // component
 
 export class SDK extends EventEmitter<{
     "connected": [];
     "disconnected": [ number, string ];
-    "error": [ Error ];
+    "initialized": [];
+    "released": [];
+    "error": [ components["schemas"]["PushEventPluginError"]["data"] ];
 }> {
 
     // protected
@@ -73,7 +79,41 @@ export class SDK extends EventEmitter<{
 
             // avoid catching error on reconnection
             if (evt instanceof ErrorEvent) {
-                this.emit("error", new Error(evt.message));
+
+                this.emit("error", {
+                    "code": "unknown",
+                    "message": evt.message
+                });
+
+            }
+
+        };
+
+        this._socket.onmessage = (event: MessageEvent<string>): void => {
+
+            const parsedMessage: tEvents = JSON.parse(event.data) as tEvents;
+
+            // must disable the rule because the plugin name can be sended by another plugin
+            if ("mia-vlc-read-sound" === parsedMessage.plugin) { // eslint-disable-line @typescript-eslint/no-unnecessary-condition
+
+                switch (parsedMessage.command) {
+
+                    case "initialized":
+                        this.emit("initialized");
+                    break;
+                    case "released":
+                        this.emit("released");
+                    break;
+                    case "error":
+                        this.emit("error", parsedMessage.data);
+                    break;
+
+                    default:
+                        // nothing to do here
+                    break;
+
+                }
+
             }
 
         };

@@ -200,6 +200,10 @@
 	},
 	"components": {
 		"schemas": {
+			"PluginName": {
+				"type": "string",
+				"enum": [ "mia-vlc-read-sound" ]
+			},
 			"Error": {
 				"type": "object",
 				"description": "JSON Error description",
@@ -212,6 +216,57 @@
 					}
 				},
 				"required": [ "code", "message" ]
+			},
+			"PushEventPluginInitialized": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"plugin": {
+						"$ref": "#/components/schemas/PluginName"
+					},
+					"command": {
+						"type": "string",
+						"enum": [ "initialized" ]
+					}
+				},
+				"required": [ "id", "plugin", "command" ]
+			},
+			"PushEventPluginReleased": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"plugin": {
+						"$ref": "#/components/schemas/PluginName"
+					},
+					"command": {
+						"type": "string",
+						"enum": [ "released" ]
+					}
+				},
+				"required": [ "id", "plugin", "command" ]
+			},
+			"PushEventPluginError": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"plugin": {
+						"$ref": "#/components/schemas/PluginName"
+					},
+					"command": {
+						"type": "string",
+						"enum": [ "error" ]
+					},
+					"data": {
+						"$ref": "#/components/schemas/Error"
+					}
+				},
+				"required": [ "id", "plugin", "command", "data" ]
 			}
 		}
 	},

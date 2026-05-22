@@ -16,14 +16,18 @@
 
     // externals
     import type ContainerPattern from "node-containerpattern";
-    import type { iDescriptorUserOptions } from "node-pluginsmanager-plugin";
+    import type { iEventsMinimal, iDescriptorUserOptions } from "node-pluginsmanager-plugin";
 
     // locals
-    import type { operations } from "./Descriptor";
+    import type { operations, components } from "./Descriptor";
 
 // module
 
-export default class MediatorVLCReadSound extends Mediator {
+export default class MediatorVLCReadSound extends Mediator<iEventsMinimal & {
+    "initialized": [ ContainerPattern ];
+    "released": [ ContainerPattern ];
+    "error": [ components["schemas"]["PushEventPluginError"]["data"] ];
+}> {
 
     private _container: ContainerPattern | null;
 
