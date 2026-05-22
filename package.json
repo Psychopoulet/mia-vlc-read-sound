@@ -71,7 +71,7 @@
     "check-version-modules": "2.4.0",
     "eslint-plugin-personnallinter": "git+ssh://git@github.com/Psychopoulet/eslint-plugin-personnallinter",
     "husky": "9.1.7",
-    "mocha": "11.7.5",
+    "mocha": "11.7.6",
     "node-containerpattern": "1.11.0",
     "nyc": "18.0.0",
     "openapi-typescript": "7.13.0",
@@ -83,7 +83,7 @@
     "ts-loader": "9.5.7",
     "typescript": "5.9.3",
     "used-deps-analyzer": "0.3.0",
-    "webpack": "5.107.0",
+    "webpack": "5.107.1",
     "webpack-cli": "7.0.2"
   },
 
