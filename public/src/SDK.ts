@@ -9,8 +9,17 @@
     type Timeout = ReturnType<typeof setTimeout>;
 
     // locals
-    import type { components } from "./Descriptor";
+    import type { components, paths, operations } from "./Descriptor";
     type tEvents = components["schemas"]["PushEventPluginInitialized"] | components["schemas"]["PushEventPluginReleased"] | components["schemas"]["PushEventPluginError"];
+
+    type NonNeverKeys<T> = {
+        [K in keyof T]: T[K] extends never ? never : K
+    }[keyof T];
+
+    type HttpMethodsOf<P extends keyof paths> = Exclude<
+        NonNeverKeys<paths[P]>,
+        "parameters"
+    >;
 
 // component
 
@@ -137,6 +146,71 @@ export class SDK extends EventEmitter<{
         }
 
         this._socket = null;
+
+    }
+
+    // api
+
+    public getPluginDescriptor (): Promise<operations["getPluginDescriptor"]["responses"]["200"]["content"]["application/json"]> {
+
+        const url: keyof paths = "/mia-vlc-read-sound/api/descriptor";
+        const method: HttpMethodsOf<typeof url> = "get";
+
+        return fetch(url, {
+            "method": method,
+            "headers": {
+                "Content-Type": "application/json"
+            }
+        }).then((res: Response): Promise<operations["getPluginDescriptor"]["responses"]["200"]["content"]["application/json"]> => {
+
+            if (res.ok) {
+                return res.json();
+            }
+
+            return new Promise((resolve: unknown, reject: (error: Error) => void): void => {
+
+                res.json().then((content: operations["getPluginDescriptor"]["responses"]["default"]["content"]["application/json"]): void => {
+                    return reject(new Error(content.message));
+                }).catch((): void => {
+                    return reject(new Error("Problem with request getPluginDescriptor has status '" + res.status + "' (" + res.statusText + ")"));
+                });
+
+            });
+
+        });
+
+    }
+
+    public getPluginStatus (): Promise<operations["getPluginStatus"]["responses"]["200"]["content"]["application/json"]> {
+
+        const url: keyof paths = "/mia-vlc-read-sound/api/status";
+        const method: HttpMethodsOf<typeof url> = "get";
+
+        return fetch(url, {
+            "method": method,
+            "headers": {
+                "Content-Type": "application/json"
+            }
+        }).then((res: Response): Promise<operations["getPluginStatus"]["responses"]["200"]["content"]["application/json"]> => {
+
+            if (res.ok) {
+                return res.json();
+            }
+            else if (404 === res.status) {
+                return Promise.resolve("RELEASED");
+            }
+
+            return new Promise((resolve: unknown, reject: (error: Error) => void): void => {
+
+                res.json().then((content: operations["getPluginStatus"]["responses"]["default"]["content"]["application/json"]): void => {
+                    return reject(new Error(content.message));
+                }).catch((): void => {
+                    return reject(new Error("Problem with request getPluginStatus has status '" + res.status + "' (" + res.statusText + ")"));
+                });
+
+            });
+
+        });
 
     }
 

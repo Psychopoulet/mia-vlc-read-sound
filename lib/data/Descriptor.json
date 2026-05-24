@@ -6,11 +6,11 @@
 	},
 	"paths": {
 
-		"/mia-vlc-read-sound/descriptor": {
+		"/mia-vlc-read-sound/api/descriptor": {
 			"get": {
 				"description": "",
 				"summary": "Plugin's descriptor",
-				"operationId": "getDescriptor",
+				"operationId": "getPluginDescriptor",
 				"responses": {
 					"200": {
 						"description": "Plugin's descriptor",
@@ -35,11 +35,11 @@
 				}
 			}
 		},
-		"/mia-vlc-read-sound/status": {
+		"/mia-vlc-read-sound/api/status": {
 			"get": {
 				"description": "",
 				"summary": "Plugin's status",
-				"operationId": "getStatus",
+				"operationId": "getPluginStatus",
 				"responses": {
 					"200": {
 						"description": "Plugin's status",
@@ -47,7 +47,17 @@
 							"application/json": {
 								"schema": {
 									"type": "string",
-									"enum": [ "ENABLED", "INITIALIZED" ]
+									"enum": [ "ENABLED", "INITIALIZED", "RELEASED" ]
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "The plugin is not enabled (=RELEASED)",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/Error"
 								}
 							}
 						}
@@ -155,7 +165,7 @@
 			}
 		},
 
-		"/mia-vlc-read-sound/read-sound": {
+		"/mia-vlc-read-sound/api/read-sound": {
 			"put": {
 				"description": "",
 				"summary": "Read sound with VLC",
