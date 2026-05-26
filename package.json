@@ -68,6 +68,7 @@
     "@types/socket.io": "3.0.2",
     "@types/ws": "8.18.1",
     "check-node-engine": "1.0.0",
+    "check-version-modules": "2.5.0",
     "eslint-plugin-personnallinter": "git+ssh://git@github.com/Psychopoulet/eslint-plugin-personnallinter",
     "husky": "9.1.7",
     "mocha": "11.7.6",
@@ -82,7 +83,7 @@
     "ts-loader": "9.5.7",
     "typescript": "5.9.3",
     "used-deps-analyzer": "0.3.0",
-    "webpack": "5.107.1",
+    "webpack": "5.107.2",
     "webpack-cli": "7.0.2"
   },
 
