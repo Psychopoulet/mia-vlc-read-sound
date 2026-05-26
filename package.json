@@ -19,8 +19,6 @@
 
   "scripts": {
 
-    "prepare": "npx husky || true",
-
     "transpile-openapi-back": "npx openapi-typescript ./lib/data/Descriptor.json -o ./lib/src/Descriptor.ts",
     "transpile-openapi-front": "npx openapi-typescript ./lib/data/Descriptor.json -o ./public/src/Descriptor.ts",
     "transpile-openapi": "npm run transpile-openapi-back && npm run transpile-openapi-front",
