@@ -2,7 +2,8 @@
 	"openapi": "3.0.2",
 	"info": {
 		"title": "mia-vlc-read-sound",
-		"version": "1.0.0"
+		"version": "1.0.0",
+  		"description": "Read sound with VLC - plugin for MIA."
 	},
 	"paths": {
 
@@ -187,7 +188,7 @@
 					}
 				},
 				"responses": {
-					"204": {
+					"201": {
 						"description": "Everything is fine",
 						"content": {
 							"application/json": {}
