@@ -2,7 +2,7 @@
 
   "name": "mia-vlc-read-sound",
   "version": "1.0.0",
-  "description": "Read sound with VLC - plugin for MIA.",
+  "description": "Read sound with VLC.",
 
   "type": "commonjs",
   "typings": "./lib/cjs/main.d.cts",

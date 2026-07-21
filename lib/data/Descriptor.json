@@ -3,7 +3,7 @@
 	"info": {
 		"title": "mia-vlc-read-sound",
 		"version": "1.0.0",
-  		"description": "Read sound with VLC - plugin for MIA."
+  		"description": "Read sound with VLC."
 	},
 	"paths": {
 
@@ -229,55 +229,13 @@
 				"required": [ "code", "message" ]
 			},
 			"PushEventPluginInitialized": {
-				"type": "object",
-				"properties": {
-					"id": {
-						"type": "string"
-					},
-					"plugin": {
-						"$ref": "#/components/schemas/PluginName"
-					},
-					"command": {
-						"type": "string",
-						"enum": [ "initialized" ]
-					}
-				},
-				"required": [ "id", "plugin", "command" ]
+				"$ref": "./DescriptorEvents.json#/components/schemas/PushEventPluginInitialized"
 			},
 			"PushEventPluginReleased": {
-				"type": "object",
-				"properties": {
-					"id": {
-						"type": "string"
-					},
-					"plugin": {
-						"$ref": "#/components/schemas/PluginName"
-					},
-					"command": {
-						"type": "string",
-						"enum": [ "released" ]
-					}
-				},
-				"required": [ "id", "plugin", "command" ]
+				"$ref": "./DescriptorEvents.json#/components/schemas/PushEventPluginReleased"
 			},
 			"PushEventPluginError": {
-				"type": "object",
-				"properties": {
-					"id": {
-						"type": "string"
-					},
-					"plugin": {
-						"$ref": "#/components/schemas/PluginName"
-					},
-					"command": {
-						"type": "string",
-						"enum": [ "error" ]
-					},
-					"data": {
-						"$ref": "#/components/schemas/Error"
-					}
-				},
-				"required": [ "id", "plugin", "command", "data" ]
+				"$ref": "./DescriptorEvents.json#/components/schemas/PushEventPluginError"
 			}
 		}
 	},
