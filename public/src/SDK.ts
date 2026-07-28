@@ -28,10 +28,15 @@ export class SDK extends EventEmitter<{
     "error": [ components["schemas"]["PushEventPluginError"]["data"] ];
 }> {
 
+    // static
+
+        private static readonly _tokenKey: string = "MIAApp-token-auth";
+
     // protected
 
         protected _socket: WebSocket | null;
         protected _reconnectTimeout: Timeout | null;
+        protected _token: string | null;
 
     // constructor
 
@@ -41,6 +46,8 @@ export class SDK extends EventEmitter<{
 
         this._socket = null;
         this._reconnectTimeout = null;
+
+        this._token = localStorage.getItem(SDK._tokenKey);
 
     }
 
@@ -185,6 +192,10 @@ export class SDK extends EventEmitter<{
 
     // api
 
+    public isLoggedIn (): boolean {
+        return Boolean(this._token);
+    }
+
     public getPluginDescriptor (): Promise<operations["getPluginDescriptor"]["responses"]["200"]["content"]["application/json"]> {
 
         const url: keyof paths = "/mia-vlc-read-sound/api/descriptor";
@@ -193,7 +204,8 @@ export class SDK extends EventEmitter<{
         return fetch(url, {
             "method": method,
             "headers": {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + this._token
             }
         }).then((res: Response): Promise<operations["getPluginDescriptor"]["responses"]["200"]["content"]["application/json"]> => {
 
@@ -211,7 +223,8 @@ export class SDK extends EventEmitter<{
         return fetch(url, {
             "method": method,
             "headers": {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + this._token
             }
         }).then((res: Response): Promise<operations["getPluginStatus"]["responses"]["200"]["content"]["application/json"]> => {
 
