@@ -50,6 +50,11 @@ export default class App extends React.Component<iPropsNode, iState> {
 
     public componentDidMount (): void {
 
+        if (!this._sdk.isLoggedIn()) {
+            window.location.assign("/");
+            return;
+        }
+
         this._sdk
             .on("connected", this._onConnected)
             .on("disconnected", this._onDisconnected)
