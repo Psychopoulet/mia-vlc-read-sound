@@ -99,7 +99,7 @@ User-facing only (no implementation details):
 Full-stack pass: Descriptor vs Mediator vs SDK vs UI, VLC flags vs product goal, tests/coverage, README accuracy, leftover template/stream-deck strings.
 
 ## Step status
-- [ ] a) OpenAPI
+- [x] a) OpenAPI
 - [ ] b) Back-office
 - [ ] c) Unit tests
 - [ ] d) Front SDK

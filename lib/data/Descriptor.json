@@ -173,8 +173,8 @@
 		},
 		"/mia-vlc-read-sound/api/read-sound": {
 			"put": {
-				"description": "",
-				"summary": "Read sound with VLC",
+				"description": "Play a sound with VLC in the background: no window, no extra UI, VLC exits when playback ends. `sound` is a local path or a VLC MRL (file://, http://, …).",
+				"summary": "Play a sound with VLC (headless)",
 				"operationId": "readSound",
 				"security": [
 					{ "bearerAuth": [] }
@@ -187,7 +187,8 @@
 								"type": "object",
 								"properties": {
 									"sound": {
-										"type": "string"
+										"type": "string",
+										"description": "Local file path or VLC media MRL to play."
 									}
 								},
 								"required": [ "sound" ]
@@ -197,10 +198,7 @@
 				},
 				"responses": {
 					"201": {
-						"description": "Everything is fine",
-						"content": {
-							"application/json": {}
-						}
+						"description": "Playback finished and VLC exited."
 					},
 					"default": {
 						"description": "An error occurred",
