@@ -6,6 +6,7 @@
 
     // locals
     import getSDK from "./SDK";
+    import SoundPlayer from "./components/SoundPlayer";
 
 // types & interfaces
 
@@ -128,6 +129,17 @@ export default class App extends React.Component<iPropsNode, iState> {
 
     };
 
+    private readonly _handleFeatureError = (err: Error): void => {
+
+        this.setState({
+            "error": {
+                "code": "UNKNOWN_ERROR",
+                "message": err.message
+            }
+        });
+
+    };
+
     // render
 
     public render (): React.JSX.Element {
@@ -170,7 +182,7 @@ export default class App extends React.Component<iPropsNode, iState> {
                     </ModalBody>
                 </Modal> }
 
-                <span>Hello World !</span>
+                <SoundPlayer onError={ this._handleFeatureError } />
 
             </div>;
 
