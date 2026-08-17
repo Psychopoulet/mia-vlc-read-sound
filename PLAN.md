@@ -101,7 +101,7 @@ Full-stack pass: Descriptor vs Mediator vs SDK vs UI, VLC flags vs product goal,
 ## Step status
 - [x] a) OpenAPI
 - [x] b) Back-office
-- [ ] c) Unit tests
+- [x] c) Unit tests
 - [ ] d) Front SDK
 - [ ] e) Front components
 - [ ] f) README
