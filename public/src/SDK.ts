@@ -238,6 +238,32 @@ export class SDK extends EventEmitter<{
 
     }
 
+    public readSound (
+        data: operations["readSound"]["requestBody"]["content"]["application/json"]
+    ): Promise<void> {
+
+        const url: keyof paths = "/mia-vlc-read-sound/api/read-sound";
+        const method: HttpMethodsOf<typeof url> = "put";
+
+        return fetch(url, {
+            "method": method,
+            "headers": {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + this._token
+            },
+            "body": JSON.stringify(data)
+        }).then((res: Response): Promise<void> => {
+
+            if (res.ok) {
+                return Promise.resolve();
+            }
+
+            return this._parseResponse(res) as Promise<void>;
+
+        });
+
+    }
+
 }
 
 let _sdk: SDK | null = null;
