@@ -25,6 +25,8 @@ describe("VLC", () => {
         strictEqual(await vlc.isAvailable(), true);
         strictEqual(spawn.calls.length, 1);
         strictEqual(spawn.calls[0].args.includes(QUIT_MRL), true);
+        strictEqual(spawn.calls[0].args.join(" "), [ ...PLAY_FLAGS, QUIT_MRL ].join(" "));
+        strictEqual(spawn.calls[0].spawnOptions.stdio, "ignore");
 
     });
 
@@ -119,6 +121,26 @@ describe("VLC", () => {
         await rejects(() => {
             return vlc.play("sound.mp3");
         }, /playback failed/);
+
+    });
+
+    it("should log debug messages when probing availability", async () => {
+
+        const logs = [];
+        const spawn = createSpawnMock();
+
+        const vlc = new VLC({
+            "binary": process.execPath,
+            "spawn": spawn,
+            "debug": (message) => {
+                logs.push(message);
+            }
+        });
+
+        await vlc.isAvailable();
+
+        strictEqual(logs.length, 1);
+        strictEqual(logs[0], process.execPath + " " + [ ...PLAY_FLAGS, QUIT_MRL ].join(" "));
 
     });
 

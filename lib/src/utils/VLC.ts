@@ -42,6 +42,11 @@
         ]
     };
 
+    const PROBE_SPAWN_OPTIONS: SpawnOptions = {
+        "windowsHide": true,
+        "stdio": "ignore"
+    };
+
 // private
 
     function _defaultEnv (): NodeJS.ProcessEnv {
@@ -103,6 +108,7 @@ export default class VLC {
         private readonly _spawn: typeof spawn;
 
         private _binary: string | null;
+        private _available: boolean | null;
 
     // constructor
 
@@ -115,6 +121,7 @@ export default class VLC {
         this._spawn = options.spawn ?? spawn;
 
         this._binary = null;
+        this._available = null;
 
     }
 
@@ -122,17 +129,24 @@ export default class VLC {
 
     public isAvailable (): Promise<boolean> {
 
-        return this._resolveBinary().then((binary: string): Promise<boolean> => {
+        if (null !== this._available) {
+            return Promise.resolve(this._available);
+        }
 
-            return this._execute(binary, [
-                ...PLAY_FLAGS,
-                QUIT_MRL
-            ]).then((): boolean => {
-                return true;
-            });
+        return this._resolveBinary().then((binary: string): Promise<boolean> => {
+            return this._probe(binary);
+        }).then((available: boolean): boolean => {
+
+            this._available = available;
+
+            return available;
 
         }).catch((): boolean => {
+
+            this._available = false;
+
             return false;
+
         });
 
     }
@@ -154,6 +168,55 @@ export default class VLC {
     }
 
     // private
+
+    private _probe (binary: string): Promise<boolean> {
+
+        return new Promise((resolve: (available: boolean) => void, reject: (err: Error) => void): void => {
+
+            const args: string[] = [
+                ...PLAY_FLAGS,
+                QUIT_MRL
+            ];
+
+            if ("function" === typeof this._debug) {
+                this._debug(binary + " " + args.join(" "));
+            }
+
+            let exited: boolean = false;
+
+            const child: ChildProcess = this._spawn(binary, args, PROBE_SPAWN_OPTIONS);
+
+            child.once("error", (err: NodeJS.ErrnoException): void => {
+
+                if (!exited) {
+
+                    exited = true;
+
+                    if ("ENOENT" === err.code) {
+                        reject(new Error("VLC binary not found: " + binary));
+                    }
+                    else {
+                        reject(err);
+                    }
+
+                }
+
+            });
+
+            child.on("close", (code: number | null): void => {
+
+                if (!exited) {
+
+                    exited = true;
+                    resolve(0 === code);
+
+                }
+
+            });
+
+        });
+
+    }
 
     private _resolveBinary (): Promise<string> {
 
