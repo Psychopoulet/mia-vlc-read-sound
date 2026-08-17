@@ -1,22 +1,19 @@
 // deps
 
     // natives
-    import { spawn } from "node:child_process";
     import { readFile } from "node:fs/promises";
     import { join } from "node:path";
 
     // externals
-    import { Mediator } from "node-pluginsmanager-plugin";
+    import { Mediator, type iEventsMinimal, type iDescriptorUserOptions } from "node-pluginsmanager-plugin";
+
+    // locals
+    import VLC, { type iVLCOptions } from "./utils/VLC";
 
 // types & interfaces
 
-    // natives
-    import type { ChildProcess } from "node:child_process";
-    import type { Readable } from "node:stream";
-
     // externals
     import type ContainerPattern from "node-containerpattern";
-    import type { iEventsMinimal, iDescriptorUserOptions } from "node-pluginsmanager-plugin";
 
     // locals
     import type { operations, components } from "./Descriptor";
@@ -29,28 +26,61 @@ export default class MediatorVLCReadSound extends Mediator<iEventsMinimal & {
     "error": [ components["schemas"]["PushEventPluginError"]["data"] ];
 }> {
 
-    private _container: ContainerPattern | null;
+    // attributes
+
+        private _vlc: VLC | null;
+
+    // constructor
 
     public constructor (data: iDescriptorUserOptions) {
 
         super(data);
 
-        this._container = null;
+        this._vlc = null;
 
     }
 
     protected _initWorkSpace (container: ContainerPattern): Promise<void> {
 
-        this._container = container;
+        if (container.has("vlc")) {
 
-        return this._execute("vlc", [ "--help" ]).then((): Promise<void> => {
-            return Promise.resolve();
+            this._vlc = container.get<VLC>("vlc");
+
+        }
+        else {
+
+            const options: iVLCOptions = container.has("vlc-options")
+                ? container.get<iVLCOptions>("vlc-options")
+                : {};
+
+            if (container.has("log")) {
+
+                options.debug = (message: string): void => {
+                    container.get<{ "debug": (log: string) => void }>("log").debug(message);
+                };
+
+            }
+
+            this._vlc = new VLC(options);
+
+        }
+
+        return this._vlc.isAvailable().then((available: boolean): void => {
+
+            if (!available) {
+                throw new Error("VLC is not available");
+            }
+
         });
 
     }
 
     protected _releaseWorkSpace (): Promise<void> {
+
+        this._vlc = null;
+
         return Promise.resolve();
+
     }
 
     // front files
@@ -89,71 +119,13 @@ export default class MediatorVLCReadSound extends Mediator<iEventsMinimal & {
 
     // api
 
-    protected _execute (cmd: string, args: string[] = []) : Promise<string> {
-
-        return new Promise((resolve, reject): void => {
-
-            (this._container as ContainerPattern).get<{ "debug": (log: string) => void }>("log").debug(cmd + " " + args.join(" "));
-
-            let exited: boolean = false;
-
-            const child: ChildProcess = spawn(cmd, args);
-
-            child.once("error", (err: Error): void => {
-
-                if (!exited) {
-
-                    exited = true;
-
-                    reject(err);
-
-                }
-
-            });
-
-            let stdout: string = "";
-            let stderr: string = "";
-
-            (child.stdout as Readable).on("data", (chunk: Buffer): void => {
-                stdout += chunk.toString("utf-8");
-            });
-
-            (child.stderr as Readable).on("data", (chunk: Buffer): void => {
-                stderr += chunk.toString("utf-8");
-            });
-
-            child.on("close", (code: number): void => {
-
-                if (!exited) {
-
-                    exited = true;
-
-                    if (code) {
-                        reject(new Error(stderr));
-                    }
-                    else {
-                        resolve(stdout);
-                    }
-
-                }
-
-            });
-
-        });
-
-    }
-
-    // public readSound (urlParameters: operations["readSound"]["parameters"], bodyParameters: operations["readSound"]["requestBody"]["content"]["application/json"]): Promise<operations["readSound"]["responses"]["204"]["content"]["application/json"]> {
     public readSound (urlParameters: operations["readSound"]["parameters"], bodyParameters: operations["readSound"]["requestBody"]["content"]["application/json"]): Promise<void> {
 
-        return this._execute("vlc", [
-            "--intf",
-            "dummy",
-            bodyParameters.sound,
-            "vlc://quit"
-        ]).then((): Promise<void> => {
-            return Promise.resolve();
-        });
+        if (!this._vlc) {
+            return Promise.reject(new Error("VLC is not initialized"));
+        }
+
+        return this._vlc.play(bodyParameters.sound);
 
     }
 
