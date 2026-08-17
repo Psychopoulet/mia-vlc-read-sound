@@ -6,3 +6,4 @@ lib/src/Descriptor.ts
 public/dist/
 public/src/Descriptor.ts
 node_modules/
+PLAN.md
