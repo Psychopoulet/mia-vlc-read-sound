@@ -6,8 +6,8 @@
 
     // locals
     const { createSpawnMock } = require("./utils/spawnMock");
-    const VLC = require(join(__dirname, "..", "lib", "cjs", "utils", "VLC.js")).default;
-    const playFlagsFor = require(join(__dirname, "..", "lib", "cjs", "utils", "playFlagsFor.js")).default;
+    const VLC = require(join(__dirname, "..", "lib", "src", "utils", "VLC.ts")).default;
+    const playFlagsFor = require(join(__dirname, "..", "lib", "src", "utils", "playFlagsFor.ts")).default;
 
 // consts
 

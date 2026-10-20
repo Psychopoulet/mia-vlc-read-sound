@@ -5,7 +5,7 @@
     const { deepStrictEqual } = require("node:assert");
 
     // locals
-    const playFlagsFor = require(join(__dirname, "..", "lib", "cjs", "utils", "playFlagsFor.js")).default;
+    const playFlagsFor = require(join(__dirname, "..", "lib", "src", "utils", "playFlagsFor.ts")).default;
 
 // consts
 
