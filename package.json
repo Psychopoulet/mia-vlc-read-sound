@@ -1,7 +1,7 @@
 {
 
   "name": "mia-vlc-read-sound",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Read sound with VLC.",
 
   "type": "commonjs",

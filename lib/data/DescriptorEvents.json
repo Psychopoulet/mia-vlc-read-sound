@@ -2,7 +2,7 @@
 	"openapi": "3.1.2",
 	"info": {
 		"title": "mia-vlc-read-sound - events",
-		"version": "1.0.2",
+		"version": "1.0.3",
 		"description": "Read sound with VLC. Events description.",
 		"license": {
 			"name": "ISC",
