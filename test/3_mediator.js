@@ -77,6 +77,30 @@ describe("Mediator VLC read sound — init", () => {
 
     });
 
+    it("should use empty VLC options when none are registered", async () => {
+
+        const container = new Container();
+        const mediator = await createMediator(descriptor, {
+            "container": container,
+            "init": false
+        });
+
+        try {
+
+            await mediator.init(container);
+
+        }
+        catch (err) {
+
+            strictEqual(err instanceof Error, true);
+            strictEqual(err.message, "VLC is not available");
+
+        }
+
+        await mediator.release();
+
+    });
+
 });
 
 describe("Mediator VLC read sound — readSound", () => {

@@ -5,7 +5,7 @@
     const { strictEqual } = require("node:assert");
 
     // locals
-    const looksLikeFilePath = require(join(__dirname, "..", "lib", "cjs", "utils", "looksLikeFilePath.js")).default;
+    const looksLikeFilePath = require(join(__dirname, "..", "lib", "src", "utils", "looksLikeFilePath.ts")).default;
 
 // tests
 

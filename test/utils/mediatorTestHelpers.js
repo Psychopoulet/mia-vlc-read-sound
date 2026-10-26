@@ -8,7 +8,7 @@
     const Container = require("node-containerpattern");
 
     // locals
-    const Mediator = require(join(__dirname, "..", "..", "lib", "cjs", "Mediator.js")).default;
+    const Mediator = require(join(__dirname, "..", "..", "lib", "src", "Mediator.ts")).default;
 
 // consts
 

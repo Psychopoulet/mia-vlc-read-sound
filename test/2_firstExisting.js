@@ -5,7 +5,7 @@
     const { strictEqual } = require("node:assert");
 
     // locals
-    const firstExisting = require(join(__dirname, "..", "lib", "cjs", "utils", "firstExisting.js")).default;
+    const firstExisting = require(join(__dirname, "..", "lib", "src", "utils", "firstExisting.ts")).default;
 
 // consts
 

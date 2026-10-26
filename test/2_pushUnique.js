@@ -5,7 +5,7 @@
     const { deepStrictEqual } = require("node:assert");
 
     // locals
-    const pushUnique = require(join(__dirname, "..", "lib", "cjs", "utils", "pushUnique.js")).default;
+    const pushUnique = require(join(__dirname, "..", "lib", "src", "utils", "pushUnique.ts")).default;
 
 // tests
 
